@@ -3,16 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@svgr/plugin-svgo": "^8.1.0",
-    "@svgr/webpack": "^8.1.0",
     "@testing-library/jest-dom": "^6.4.8",
     "@testing-library/react": "^16.0.0",
-    "@testing-library/user-event": "^13.5.0",
+    "@testing-library/user-event": "^14.5.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-scripts": "^5.0.1",
-    "svgo": "^3.3.2",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^4.2.2"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -39,8 +36,20 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@svgr/plugin-svgo": "^6.5.1",
+    "@svgr/webpack": "^5.5.0",
     "autoprefixer": "^10.4.19",
+    "css-select": "^4.3.0",
+    "nth-check": "^2.1.1",
     "postcss": "^8.4.40",
+    "resolve-url-loader": "^4.0.0",
+    "svgo": "^2.8.0",
     "tailwindcss": "^3.4.6"
-  }
+  },
+  "main": "postcss.config.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }

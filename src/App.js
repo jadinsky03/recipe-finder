@@ -4,7 +4,7 @@ import './index.css';
 const RecipeContext = createContext();
 
 function App() {
-  const [searchTerm, setS,archTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
   const [recipes, setRecipes] = useState([]);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
 
