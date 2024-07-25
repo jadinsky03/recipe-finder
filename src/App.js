@@ -1,10 +1,10 @@
-import React, { useState, useEffect, createContext, useContext } from 'react';
+import React, { useState, createContext, useContext } from 'react';
 import './index.css';
 
 const RecipeContext = createContext();
 
 function App() {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setS,archTerm] = useState('');
   const [recipes, setRecipes] = useState([]);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
 
