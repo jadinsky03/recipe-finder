@@ -15,11 +15,14 @@
 }
 
 .search-input {
-  @apply border-2 border-red-600 p-2 w-2/3 rounded-l;
+  @apply border-2 border-red-600 p-2 rounded-l w-full;
+  border-right: none;
 }
 
 .search-button {
   @apply bg-red-600 text-white p-2 rounded-r;
+  border: 2px solid #f56a6a;
+  border-left: none;
 }
 
 .content-container {
