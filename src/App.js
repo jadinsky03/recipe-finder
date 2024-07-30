@@ -1,7 +1,6 @@
 import React, { useState, useEffect, createContext, useContext } from 'react';
 import './index.css';
 import { ClipLoader } from 'react-spinners';
-import Autocomplete from 'react-autocomplete';
 
 const RecipeContext = createContext();
 
@@ -10,19 +9,6 @@ function App() {
   const [recipes, setRecipes] = useState([]);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [suggestions, setSuggestions] = useState([]);
-
-  useEffect(() => {
-    if (searchTerm.length > 2) {
-      fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${searchTerm}`)
-        .then(response => response.json())
-        .then(data => {
-          setSuggestions(data.meals || []);
-        });
-    } else {
-      setSuggestions([]);
-    }
-  }, [searchTerm]);
 
   const handleSearch = async () => {
     setLoading(true);
@@ -37,19 +23,12 @@ function App() {
       <div className="app-container">
         <h1 className="app-title">Recipe Finder</h1>
         <div className="search-bar-container">
-          <Autocomplete
-            getItemValue={(item) => item.strMeal}
-            items={suggestions}
-            renderItem={(item, isHighlighted) => (
-              <div key={item.idMeal} style={{ background: isHighlighted ? '#eee' : 'transparent' }}>
-                {item.strMeal}
-              </div>
-            )}
+          <input
+            type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            onSelect={(value) => setSearchTerm(value)}
-            inputProps={{ className: 'search-input', placeholder: 'Search for recipes or ingredients...' }}
-            wrapperStyle={{ width: '100%' }}
+            className="search-input"
+            placeholder="Search for recipes or ingredients..."
           />
           <button onClick={handleSearch} className="search-button">Search</button>
         </div>
