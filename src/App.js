@@ -1,4 +1,4 @@
-import React, { useState, createContext, useContext } from 'react';
+import React, { useState, useEffect, createContext, useContext } from 'react';
 import './index.css';
 import { ClipLoader } from 'react-spinners';
 
@@ -9,6 +9,19 @@ function App() {
   const [recipes, setRecipes] = useState([]);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
+
+  useEffect(() => {
+    if (searchTerm.length > 2) {
+      fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${searchTerm}`)
+        .then(response => response.json())
+        .then(data => {
+          setSuggestions(data.meals || []);
+        });
+    } else {
+      setSuggestions([]);
+    }
+  }, [searchTerm]);
 
   const handleSearch = async () => {
     setLoading(true);
@@ -16,6 +29,11 @@ function App() {
     const data = await response.json();
     setRecipes(data.meals);
     setLoading(false);
+  };
+
+  const handleSelectSuggestion = (suggestion) => {
+    setSearchTerm(suggestion.strMeal);
+    setSuggestions([]);
   };
 
   return (
@@ -31,6 +49,17 @@ function App() {
             placeholder="Search for recipes or ingredients..."
           />
           <button onClick={handleSearch} className="search-button">Search</button>
+        </div>
+        <div className="autocomplete-container">
+          {suggestions.map((suggestion) => (
+            <div
+              key={suggestion.idMeal}
+              className="suggestion-item"
+              onClick={() => handleSelectSuggestion(suggestion)}
+            >
+              {suggestion.strMeal}
+            </div>
+          ))}
         </div>
         <div className="content-container">
           {loading ? (

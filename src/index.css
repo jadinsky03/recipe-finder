@@ -68,3 +68,19 @@
 .recipe-placeholder {
   @apply text-gray-600;
 }
+
+.autocomplete-container {
+  position: relative;
+  width: 100%;
+}
+
+.suggestion-item {
+  background: white;
+  padding: 10px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.suggestion-item:hover {
+  background: #f0f0f0;
+}
