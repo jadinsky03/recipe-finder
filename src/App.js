@@ -23,17 +23,18 @@ function App() {
     }
   }, [searchTerm]);
 
-  const handleSearch = async () => {
+  const handleSearch = async (term) => {
     setLoading(true);
-    const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${searchTerm}`);
+    const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${term}`);
     const data = await response.json();
     setRecipes(data.meals);
     setLoading(false);
   };
 
-  const handleSelectSuggestion = (suggestion) => {
+  const handleSelectSuggestion = async (suggestion) => {
     setSearchTerm(suggestion.strMeal);
     setSuggestions([]);
+    handleSearch(suggestion.strMeal);
   };
 
   return (
@@ -48,7 +49,7 @@ function App() {
             className="search-input"
             placeholder="Search for recipes or ingredients..."
           />
-          <button onClick={handleSearch} className="search-button">Search</button>
+          <button onClick={() => handleSearch(searchTerm)} className="search-button">Search</button>
         </div>
         <div className="autocomplete-container">
           {suggestions.map((suggestion) => (
