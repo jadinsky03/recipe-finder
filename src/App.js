@@ -1,8 +1,9 @@
-import React, { useState, useEffect, createContext, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import './index.css';
 import { ClipLoader } from 'react-spinners';
-
-const RecipeContext = createContext();
+import RecipeContext from './context/RecipeContext';
+import RecipeList from './components/RecipeList';
+import RecipeDetails from './components/RecipeDetails';
 
 function App() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -10,6 +11,7 @@ function App() {
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [loading, setLoading] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
 
   useEffect(() => {
     if (searchTerm.length > 2) {
@@ -17,9 +19,11 @@ function App() {
         .then(response => response.json())
         .then(data => {
           setSuggestions(data.meals || []);
+          // setShowSuggestions(true);
         });
     } else {
       setSuggestions([]);
+      setShowSuggestions(false);
     }
   }, [searchTerm]);
 
@@ -34,7 +38,18 @@ function App() {
   const handleSelectSuggestion = async (suggestion) => {
     setSearchTerm(suggestion.strMeal);
     setSuggestions([]);
-    handleSearch(suggestion.strMeal);
+    setShowSuggestions(false);
+    await handleSearch(suggestion.strMeal);
+  };
+
+  const handleInputChange = (e) => {
+    setSearchTerm(e.target.value);
+    if (e.target.value.length > 2) {
+      setShowSuggestions(true);
+    } else {
+      setShowSuggestions(false);
+      setSuggestions([]);
+    }
   };
 
   return (
@@ -45,23 +60,25 @@ function App() {
           <input
             type="text"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={handleInputChange}
             className="search-input"
             placeholder="Search for recipes or ingredients..."
           />
           <button onClick={() => handleSearch(searchTerm)} className="search-button">Search</button>
         </div>
-        <div className="autocomplete-container">
-          {suggestions.map((suggestion) => (
-            <div
-              key={suggestion.idMeal}
-              className="suggestion-item"
-              onClick={() => handleSelectSuggestion(suggestion)}
-            >
-              {suggestion.strMeal}
-            </div>
-          ))}
-        </div>
+        {showSuggestions && suggestions.length > 0 && (
+          <div className="autocomplete-container">
+            {suggestions.map((suggestion) => (
+              <div
+                key={suggestion.idMeal}
+                className="suggestion-item"
+                onClick={() => handleSelectSuggestion(suggestion)}
+              >
+                {suggestion.strMeal}
+              </div>
+            ))}
+          </div>
+        )}
         <div className="content-container">
           {loading ? (
             <ClipLoader color="#f56a6a" loading={loading} size={50} />
@@ -74,40 +91,6 @@ function App() {
         </div>
       </div>
     </RecipeContext.Provider>
-  );
-}
-
-function RecipeList({ recipes }) {
-  const { setSelectedRecipe } = useContext(RecipeContext);
-  return (
-    <div className="recipe-list-container">
-      <h2 className="section-title">Recipe List</h2>
-      <ul className="recipe-list">
-        {recipes && recipes.map(recipe => (
-          <li key={recipe.idMeal} onClick={() => setSelectedRecipe(recipe)} className="recipe-item">
-            {recipe.strMeal}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-function RecipeDetails() {
-  const { selectedRecipe } = useContext(RecipeContext);
-  return (
-    <div className="recipe-details-container">
-      <h2 className="section-title">Recipe Details</h2>
-      {selectedRecipe ? (
-        <div className="recipe-details">
-          <h3 className="recipe-title">{selectedRecipe.strMeal}</h3>
-          <p className="recipe-instructions">{selectedRecipe.strInstructions}</p>
-          <img src={selectedRecipe.strMealThumb} alt={selectedRecipe.strMeal} className="recipe-image" />
-        </div>
-      ) : (
-        <p className="recipe-placeholder">Select a recipe to see details.</p>
-      )}
-    </div>
   );
 }
 
